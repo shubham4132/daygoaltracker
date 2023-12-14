@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialItem = [
   { id: 1, worktype: "Operating", hour: 2, progress: false },
   { id: 2, worktype: "Algorithims", hour: 3, progress: false },
@@ -9,7 +11,7 @@ export default function App() {
   return (
     <div className="app">
       <Logo />
-      <Form />
+      <GoalForm />
       <WorkList />
       <Footer />
     </div>
@@ -19,20 +21,33 @@ export default function App() {
 function Logo() {
   return <h1>🎫DAY GOAL TRACKER🧐</h1>;
 }
-function Form() {
+function GoalForm() {
+  const [hour, setHour] = useState(1);
+  const [worktype, setWorktype] = useState("");
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newItem = { id: Date.now(), hour, worktype, progress: false };
+    console.log(newItem);
+  }
   return (
-    <div className="form-add">
+    <form className="form-add" onSubmit={handleSubmit}>
       <h3>Whats Your Goal Today</h3>
-      <select>
+      <select value={hour} onChange={(e) => setHour(Number(e.target.value))}>
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
           <option value={num} key={num}>
             {num}
           </option>
         ))}
       </select>
-      <input type="text" placeholder="whats your today Goal"></input>
+
+      <input
+        type="text"
+        value={worktype}
+        onChange={(e) => setWorktype(e.target.value)}
+        placeholder="whats your today Goal"
+      ></input>
       <button>ADD</button>
-    </div>
+    </form>
   );
 }
 function WorkList() {
@@ -40,7 +55,7 @@ function WorkList() {
     <div className="list">
       <ul>
         {initialItem.map((item) => (
-          <Item itemOb={item} />
+          <Item itemOb={item} key={item.id} />
         ))}
       </ul>
     </div>
@@ -51,8 +66,8 @@ function Item({ itemOb }) {
 }
 function Footer() {
   return (
-    <div className="goalstats">
+    <footer className="goalstats">
       <h3>You have X goal in Your Today list and You already did X(X%)</h3>
-    </div>
+    </footer>
   );
 }
