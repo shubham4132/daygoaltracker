@@ -62,7 +62,7 @@ form-add button {
 .list {
   background-color: rgb(89, 100, 144);
 
-  color: #373328;
+  color: #08f4de;
   padding: 4rem 0;
   display: flex;
   justify-content: space-between;
@@ -87,4 +87,17 @@ form-add button {
   text-align: center;
   font-weight: 700;
   padding: 0.8rem 0;
+}
+/* input[type="checkbox"] {
+  height: 2rem;
+  width: 2rem;
+
+  accent-color: rebeccapurple;
+} 
+*/
+/* important css property */
+input[type="checkbox"] {
+  height: 2rem;
+  width: 2rem;
+  accent-color: rgb(17, 14, 21);
 }

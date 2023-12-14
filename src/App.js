@@ -1,18 +1,29 @@
 import { useState } from "react";
 
-const initialItem = [
-  { id: 1, worktype: "Operating", hour: 2, progress: false },
-  { id: 2, worktype: "Algorithims", hour: 3, progress: false },
-  { id: 3, worktype: "ArtificialIntelligence", hour: 2, progress: false },
-  { id: 4, worktype: "CyberSecurity", hour: 1, progress: false },
-];
-
 export default function App() {
+  const [work, setWork] = useState([]);
+  function handleAddWork(works) {
+    setWork((work) => [...work, works]);
+  }
+  function handleDeleteWork(id) {
+    setWork((work) => work.filter((item) => item.id !== id));
+  }
+  function handleToggleWork(id) {
+    setWork((work) =>
+      work.map((works) =>
+        works.id === id ? { ...works, progress: !works.progress } : works
+      )
+    );
+  }
   return (
     <div className="app">
       <Logo />
-      <GoalForm />
-      <WorkList />
+      <GoalForm onAddWork={handleAddWork} />
+      <WorkList
+        work={work}
+        onDeleteWork={handleDeleteWork}
+        onToggleItem={handleToggleWork}
+      />
       <Footer />
     </div>
   );
@@ -21,13 +32,14 @@ export default function App() {
 function Logo() {
   return <h1>🎫DAY GOAL TRACKER🧐</h1>;
 }
-function GoalForm() {
+function GoalForm({ onAddWork }) {
   const [hour, setHour] = useState(1);
   const [worktype, setWorktype] = useState("");
   function handleSubmit(e) {
     e.preventDefault();
-    const newItem = { id: Date.now(), hour, worktype, progress: false };
-    console.log(newItem);
+    const newWork = { id: Date.now(), hour, worktype, progress: false };
+    console.log(newWork);
+    onAddWork(newWork);
   }
   return (
     <form className="form-add" onSubmit={handleSubmit}>
@@ -50,19 +62,36 @@ function GoalForm() {
     </form>
   );
 }
-function WorkList() {
+function WorkList({ work, onDeleteWork, onToggleItem }) {
   return (
     <div className="list">
       <ul>
-        {initialItem.map((item) => (
-          <Item itemOb={item} key={item.id} />
+        {work.map((item) => (
+          <Item
+            itemOb={item}
+            key={item.id}
+            onDeleteWork={onDeleteWork}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ itemOb }) {
-  return <li>{itemOb.worktype}</li>;
+function Item({ itemOb, onDeleteWork, onToggleItem }) {
+  return (
+    <li>
+      <input
+        type="checkBox"
+        value={itemOb}
+        onChange={(e) => onToggleItem(itemOb.id)}
+      />
+      <span style={itemOb.progress ? { textDecoration: "line-through" } : {}}>
+        {itemOb.hour}hr {itemOb.worktype}
+      </span>
+      <button onClick={(e) => onDeleteWork(itemOb.id)}>❌</button>
+    </li>
+  );
 }
 function Footer() {
   return (
