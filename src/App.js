@@ -24,7 +24,7 @@ export default function App() {
         onDeleteWork={handleDeleteWork}
         onToggleItem={handleToggleWork}
       />
-      <Footer />
+      <Footer work={work} />
     </div>
   );
 }
@@ -93,10 +93,29 @@ function Item({ itemOb, onDeleteWork, onToggleItem }) {
     </li>
   );
 }
-function Footer() {
+function Footer({ work }) {
+  const totalPlannedHours = work.reduce((total, item) => total + item.hour, 0);
+
+  const totalDoneHours = work.reduce(
+    (total, item) => (item.progress ? total + item.hour : total),
+    0
+  );
+
+  const percentageDone = (totalDoneHours / totalPlannedHours) * 100 || 0;
+  if (!work.length)
+    return (
+      <p className="goalstats">
+        <em>Start Making Your List Of Work🚀</em>
+      </p>
+    );
   return (
     <footer className="goalstats">
-      <h3>You have X goal in Your Today list and You already did X(X%)</h3>
+      <h3>
+        {percentageDone === 100
+          ? "Congratulation for the completion of task"
+          : `You have ${totalPlannedHours}hr Work for Today and You already Done
+        ${totalDoneHours}hr(${percentageDone}%)`}
+      </h3>
     </footer>
   );
 }
