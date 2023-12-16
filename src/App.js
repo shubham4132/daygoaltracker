@@ -40,6 +40,8 @@ function GoalForm({ onAddWork }) {
     const newWork = { id: Date.now(), hour, worktype, progress: false };
     console.log(newWork);
     onAddWork(newWork);
+    setHour(1);
+    setWorktype("");
   }
   return (
     <form className="form-add" onSubmit={handleSubmit}>
